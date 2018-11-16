@@ -3,6 +3,7 @@ import random
 
 def main():
     '''main function that will do things'''
+    #christians branch
 
     mndata = MNIST('samples')
 
