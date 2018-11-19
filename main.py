@@ -57,7 +57,7 @@ def maxAndAverageVertical(image):
     maxVertical = 0
     totalVertical = 0
     numChanges = 0
-    verticalList = []
+    verticalList = [] #i.e. the column
     for i in range(0, 28):
         j = i
         while j < len(image):
@@ -81,6 +81,40 @@ def maxAndAverageVertical(image):
     averageVertical = totalVertical/28
 
     return averageVertical, maxVertical
+
+
+def maxAndAverageHorizontal(image):
+    # input: grey scale image (binary 1 and 0 values only)
+    # output: returns the maximum and average horizontal intersections
+    maxHorizontal = 0
+    totalHorizontal = 0
+    numChanges = 0
+    horizontalList = [] #i.e. the row
+
+    #for i in range(0, 28):
+    i = 0
+    while i < len(image):
+        for j in range(i, i+28):
+            horizontalList.append(image[j])
+
+        # start at 1 so we can evaluate the 1st row
+        # evaluate all values to their previous value
+        # to see if there was a change
+        for k in range(1, len(horizontalList)):
+            if horizontalList[k-1] != horizontalList[k]:
+                numChanges += 1
+
+        maxHorizontal= max(maxHorizontal, numChanges)
+        totalHorizontal += numChanges
+
+            # reset the list and numChanges variables to evaluate the next column
+        horizontalList = []
+        numChanges = 0
+        i += 28
+
+    averageHorizontal = totalHorizontal / 28
+
+    return averageHorizontal, maxHorizontal
 
 def specificDigits(labels,images, cls1, cls2):
 
@@ -124,6 +158,8 @@ def main():
 
     averageVertical, maxVertical = maxAndAverageVertical(greyImage)
 
+    averageHorizontal, maxHorizontal = maxAndAverageHorizontal(greyImage)
+
     print("Image List Representation = ", imageCopy1)
 
     print("Image Class =", onesAndFivesLabels[index])
@@ -139,6 +175,10 @@ def main():
     print("Average Vertical Intersections =", averageVertical)
 
     print("Maximum Vertical Intersections =", maxVertical)
+
+    print("Average Horizontal Intersections =", averageHorizontal)
+
+    print("Maximum Horizontal Intersections =", maxHorizontal)
 
 
 
