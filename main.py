@@ -1,3 +1,11 @@
+"""
+Authors: Jorge Bautista, Ryan Boyle, Christian Havranek
+Class: CS 480 Artificial Intelligence
+Professor: Bala Ravikumar
+Project: Project 5 MNIST Data Set Classification
+"""
+
+
 from mnist import MNIST
 import random
 
@@ -18,19 +26,29 @@ def symmetry_density(image):
     # a same pixel value and it gets added to the x value to
     # be averaged out once the list has been exhausted
 
-    reflected = list(reversed(image))
+    #reflected = list(reversed(image))
     x = 0
 
     numOnes = sum(image)
 
-    for i in range(0, len(image)):
+    numZeros = len(image) - numOnes
+
+    i = 0
+    while i < len(image):
+        for j in range(0, 28):
+            if image[j + i] == 0 or image[(27 - j) + i] == 0:
+                if (image[j+i] ^ image[(27 - j) + i]) == 0:
+                    x += 1
+
+        i += 28
+    """"for i in range(0, len(image)):
         # want to add a 1 for every same value found
         # disregarding all 0 0 pairs
-        if image[i] == 1 or reflected[i] == 1:
+        if image[i] == 0 or reflected[i] == 0:
             if not (image[i] ^ reflected[i]):
-                x += 1
+                x += 1"""
 
-    return x / numOnes
+    return x / numZeros
 
 
 def to_grey(image):
@@ -116,7 +134,7 @@ def maxAndAverageHorizontal(image):
 
     return averageHorizontal, maxHorizontal
 
-def specificDigits(labels,images, cls1, cls2):
+def specificDigits(labels,images, cls1, cls2 = None):
 
     # this function will grab the two desired image classes and output the
     # new corresponding label and image arrays
@@ -131,6 +149,10 @@ def specificDigits(labels,images, cls1, cls2):
     return specLabels, specImages
 
 
+"""def splitTrainTest(images, labels):
+    twentyPercent  = int(len(images) * 0.20)
+    trainImages = images[]"""
+
 def main():
 
     mndata = MNIST('samples')
@@ -138,16 +160,24 @@ def main():
 
     #loading the images from mnist
     trainImages, trainLabels = mndata.load_training()
-
     testImages, testLabels = mndata.load_testing()
 
+    # combining all images into the training data so that we can split the data ourselves
+    trainImages += testImages
+    trainLabels += testLabels
+
     onesAndFivesLabels, onesAndFivesImages = specificDigits(trainLabels, trainImages, 1, 5)
+    data7Labels, data7Images = specificDigits(trainLabels, trainImages, 7)
+    data9Labels, data9Images = specificDigits(trainLabels, trainImages, 9)
+
+    print("Number of 7s =", len(data7Images))
+    print("20% of 7s =", int(len(data7Images)*.20))
+    print("Number of 9s =", len(data9Images))
 
     index = random.randrange(0, len(onesAndFivesLabels))  # choose an index ;-)
     print(mndata.display(onesAndFivesImages[index]))
 
     imageCopy1 = onesAndFivesImages[index].copy()
-
     imageCopy2 = imageCopy1.copy()
 
     greyImage = to_grey(imageCopy1)
@@ -180,7 +210,25 @@ def main():
 
     print("Maximum Horizontal Intersections =", maxHorizontal)
 
+    """test = []
+    test = [1] * 784
 
+    test[392] = 0
+    test[393] = 0
+    test[420] = 0
+    test[421] = 0
+    test[419] = 0
+    test[418] = 0
+    test[446] = 0
+    test[447] = 0
+
+    i = 0
+    while i < len(test):
+        for j in range(i, i+28):
+            print(test[j], end = "")
+        print()
+        i += 28
+    print("No mas = ", symmetry_density(test))"""
 
 
 
