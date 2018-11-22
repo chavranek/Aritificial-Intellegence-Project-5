@@ -9,7 +9,6 @@ Project: Project 5 MNIST Data Set Classification
 from mnist import MNIST
 import random
 
-
 def density(image):
     # input: takes the non modified image with the original
     #        pixel values in it
@@ -27,18 +26,12 @@ def symmetry_density(image):
     # be averaged out once the list has been exhausted
 
     #reflected = list(reversed(image))
-    x = 0
-
-    numOnes = sum(image)
-
-    numZeros = len(image) - numOnes
-
+    x=0
     i = 0
-    while i < len(image):
+    while i < len(image)/2:
         for j in range(0, 28):
-            if image[j + i] == 0 or image[(27 - j) + i] == 0:
-                if (image[j+i] ^ image[(27 - j) + i]) == 0:
-                    x += 1
+             if (image[j+i] ^ image[(27 - j) + i]) == 0:
+                 x += 1
 
         i += 28
     """"for i in range(0, len(image)):
@@ -48,7 +41,7 @@ def symmetry_density(image):
             if not (image[i] ^ reflected[i]):
                 x += 1"""
 
-    return x / numZeros
+    return x / 748
 
 
 def to_grey(image):
@@ -149,9 +142,15 @@ def specificDigits(labels,images, cls1, cls2 = None):
     return specLabels, specImages
 
 
-"""def splitTrainTest(images, labels):
+def splitTrainTest(images, labels):
     twentyPercent  = int(len(images) * 0.20)
-    trainImages = images[]"""
+    trainImages = images[:len(images)-twentyPercent]
+    testImages = images[len(images)-twentyPercent:]
+
+    trainLabels = images[:len(labels)-twentyPercent]
+    testLabels = images[len(labels)-twentyPercent:]
+
+    return trainImages, testImages, trainLabels, testLabels
 
 def main():
 
@@ -162,6 +161,7 @@ def main():
     trainImages, trainLabels = mndata.load_training()
     testImages, testLabels = mndata.load_testing()
 
+
     # combining all images into the training data so that we can split the data ourselves
     trainImages += testImages
     trainLabels += testLabels
@@ -170,9 +170,20 @@ def main():
     data7Labels, data7Images = specificDigits(trainLabels, trainImages, 7)
     data9Labels, data9Images = specificDigits(trainLabels, trainImages, 9)
 
+    data7TrainIm, data7TestIm, data7TrainLa, data7TestLa = splitTrainTest(data7Images, data7Labels)
+    data9TrainIm, data9TestIm, data9TrainLa, data9TestLa = splitTrainTest(data9Images, data9Labels)
+
+    TrainImages = onesAndFivesImages + data7TrainIm + data9TrainIm
+    TrainLabels = onesAndFivesLabels + data7TrainLa + data9TrainLa
+
+    TestImages = data7TestIm + data9TestIm
+    TestLabels = data7TestLa + data9TestLa
+
+
     print("Number of 7s =", len(data7Images))
     print("20% of 7s =", int(len(data7Images)*.20))
     print("Number of 9s =", len(data9Images))
+    print("20% of 9s =", int(len(data9Images)*.20))
 
     index = random.randrange(0, len(onesAndFivesLabels))  # choose an index ;-)
     print(mndata.display(onesAndFivesImages[index]))
@@ -180,15 +191,16 @@ def main():
     imageCopy1 = onesAndFivesImages[index].copy()
     imageCopy2 = imageCopy1.copy()
 
-    greyImage = to_grey(imageCopy1)
+    BWImage = to_grey(imageCopy1)
 
-    symmetryAverage = symmetry_density(greyImage)
+    symmetryAverage = symmetry_density(imageCopy1)
 
     densityImage = density(imageCopy2)
 
-    averageVertical, maxVertical = maxAndAverageVertical(greyImage)
+    averageVertical, maxVertical = maxAndAverageVertical(BWImage)
 
-    averageHorizontal, maxHorizontal = maxAndAverageHorizontal(greyImage)
+    averageHorizontal, maxHorizontal = maxAndAverageHorizontal(BWImage)
+
 
     print("Image List Representation = ", imageCopy1)
 
@@ -196,7 +208,7 @@ def main():
 
     print("Image Index =", index)
 
-    print("Grey Image =", greyImage)
+    print("Grey Image =", BWImage)
 
     print("Symmetry Average =", symmetryAverage)
 
@@ -210,7 +222,7 @@ def main():
 
     print("Maximum Horizontal Intersections =", maxHorizontal)
 
-    """test = []
+    '''test = []
     test = [1] * 784
 
     test[392] = 0
@@ -222,13 +234,37 @@ def main():
     test[446] = 0
     test[447] = 0
 
-    i = 0
+    """i = 0
     while i < len(test):
         for j in range(i, i+28):
             print(test[j], end = "")
         print()
         i += 28
     print("No mas = ", symmetry_density(test))"""
+
+    #print("Image List Representation = ", imageCopy1)
+
+    #print("Image Class =", onesAndFivesLabels[index])
+
+    #print("Image Index =", index)
+
+    #print("Grey Image =", greyImage)
+
+    symmetryAverage = symmetry_density(test)
+
+    averageVertical, maxVertical = maxAndAverageVertical(test)
+
+    averageHorizontal, maxHorizontal = maxAndAverageHorizontal(test)
+
+    print("Symmetry Average =", symmetryAverage)
+
+    print("Average Vertical Intersections =", averageVertical)
+
+    print("Maximum Vertical Intersections =", maxVertical)
+
+    print("Average Horizontal Intersections =", averageHorizontal)
+
+    print("Maximum Horizontal Intersections =", maxHorizontal)'''
 
 
 
