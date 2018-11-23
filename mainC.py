@@ -228,11 +228,11 @@ def main():
 
 
     trainFeatures = []
-    #for i in TrainImages:
-    iFeatures = feat(data7Images[0])
-    features6 = []
-    features6.append(iFeatures.getFeatures())
-    trainFeatures.append(features6)
+    for i in TrainImages:
+        iFeatures = feat.features(i)
+        features6 = []
+        features6.append(iFeatures.getFeatures())
+        trainFeatures.append(features6)
 		
     inputs = np.array(TrainImages)
     targets = [[label] for label in TrainLabels]

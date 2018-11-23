@@ -176,7 +176,7 @@ def main():
     data7TrainIm, data7TestIm, data7TrainLa, data7TestLa = splitTrainTest(data7Images, data7Labels)
     data9TrainIm, data9TestIm, data9TrainLa, data9TestLa = splitTrainTest(data9Images, data9Labels)
 
-    print(len(data7TrainLa))
+    '''print(len(data7TrainLa))
 
     TrainImages = onesAndFivesImages + data7TrainIm + data9TrainIm
     TrainLabels = onesAndFivesLabels + data7TrainLa + data9TrainLa
@@ -225,7 +225,7 @@ def main():
 
     print("Average Horizontal Intersections =", averageHorizontal)
 
-    print("Maximum Horizontal Intersections =", maxHorizontal)
+    print("Maximum Horizontal Intersections =", maxHorizontal)'''
 
     '''test = []
     test = [1] * 784
@@ -253,15 +253,22 @@ def main():
 
     #print("Image Index =", index)
 
-    #print("Grey Image =", greyImage)
+    #print("Grey Image =", greyImage)'''
 
-    symmetryAverage = symmetry_density(test)
+    symmetryAverage = symmetry_density(data7Images[0])
 
-    averageVertical, maxVertical = maxAndAverageVertical(test)
 
-    averageHorizontal, maxHorizontal = maxAndAverageHorizontal(test)
+    BWimage = to_grey(data7Images[0])
+
+    densityImage = density(data7Images[0])
+
+    averageVertical, maxVertical = maxAndAverageVertical(BWimage)
+
+    averageHorizontal, maxHorizontal = maxAndAverageHorizontal(BWimage)
 
     print("Symmetry Average =", symmetryAverage)
+
+    print(densityImage)
 
     print("Average Vertical Intersections =", averageVertical)
 
@@ -269,17 +276,17 @@ def main():
 
     print("Average Horizontal Intersections =", averageHorizontal)
 
-    print("Maximum Horizontal Intersections =", maxHorizontal)'''
+    print("Maximum Horizontal Intersections =", maxHorizontal)
 
 
-    trainFeatures = []
+    '''trainFeatures = []
     for i in TrainImages:
         iFeatures = features(i)
         features6 = []
         features6.append(iFeatures.getFeatures())
-        trainFeatures.append(features6)
+        trainFeatures.append(features6)'''
 
-    inputs = np.array(TrainImages)
+    '''inputs = np.array(TrainImages)
     targets = [[label] for label in TrainLabels]
     targets = np.array(targets)
 
@@ -288,7 +295,7 @@ def main():
     (perc.perceptronTrain(inputs, targets, 0.1, 1000))
     print("Finished Training Data")
     print("Confusion Matrix for testing items")
-    perc.confusionMatrix(inputs, targets)
+    perc.confusionMatrix(inputs, targets)'''
     '''inputs = np.array(TestImages)
     targets = [[label] for label in TestLabels]
 
