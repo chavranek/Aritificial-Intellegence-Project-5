@@ -8,6 +8,8 @@ Project: Project 5 MNIST Data Set Classification
 
 from mnist import MNIST
 import random
+import numpy as np
+import pcn as p
 
 def density(image):
     # input: takes the non modified image with the original
@@ -147,8 +149,8 @@ def splitTrainTest(images, labels):
     trainImages = images[:len(images)-twentyPercent]
     testImages = images[len(images)-twentyPercent:]
 
-    trainLabels = images[:len(labels)-twentyPercent]
-    testLabels = images[len(labels)-twentyPercent:]
+    trainLabels = labels[:len(labels)-twentyPercent]
+    testLabels = labels[len(labels)-twentyPercent:]
 
     return trainImages, testImages, trainLabels, testLabels
 
@@ -170,8 +172,11 @@ def main():
     data7Labels, data7Images = specificDigits(trainLabels, trainImages, 7)
     data9Labels, data9Images = specificDigits(trainLabels, trainImages, 9)
 
+
     data7TrainIm, data7TestIm, data7TrainLa, data7TestLa = splitTrainTest(data7Images, data7Labels)
     data9TrainIm, data9TestIm, data9TrainLa, data9TestLa = splitTrainTest(data9Images, data9Labels)
+
+    print(len(data7TrainLa))
 
     TrainImages = onesAndFivesImages + data7TrainIm + data9TrainIm
     TrainLabels = onesAndFivesLabels + data7TrainLa + data9TrainLa
@@ -267,7 +272,27 @@ def main():
     print("Maximum Horizontal Intersections =", maxHorizontal)'''
 
 
+    trainFeatures = []
+    for i in TrainImages:
+        iFeatures = features(i)
+        features6 = []
+        features6.append(iFeatures.getFeatures())
+        trainFeatures.append(features6)
 
+    inputs = np.array(TrainImages)
+    targets = [[label] for label in TrainLabels]
+    targets = np.array(targets)
+
+    print("Training Data")
+    perc = p.perceptron(inputs, targets)
+    (perc.perceptronTrain(inputs, targets, 0.1, 1000))
+    print("Finished Training Data")
+    print("Confusion Matrix for testing items")
+    perc.confusionMatrix(inputs, targets)
+    '''inputs = np.array(TestImages)
+    targets = [[label] for label in TestLabels]
+
+    perc.confusionMatrix(inputs, targets)'''
 
 if __name__ == "__main__":
     main()
