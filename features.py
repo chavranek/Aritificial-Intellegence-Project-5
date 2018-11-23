@@ -9,7 +9,7 @@ class features:
     def symmetry_density(self):
         x = 0
         i = 0
-        while i < len(self.img):
+        while i < len(self.img) / 2:
             for j in range(0, 28):
                 if (self.img[j + i] ^ self.img[(27 - j) + i]) == 0:
                     x += 1
@@ -21,7 +21,7 @@ class features:
         for i in range(0, len(self.img)):
             if self.img[i] >= 128:
                 self.greyImage[i] = 0
-            elif self.img[i] == 128:
+            elif self.img[i] < 128:
                 self.greyImage[i] = 1
 
     # return self.greyImage
@@ -83,7 +83,7 @@ class features:
             avgVert, maxVert = self.maxAndAverageVertical()
             sixFeatures.append(avgVert)
             sixFeatures.append(maxVert)
-            avgHor, maxHor = self.maxAndAverageVertical()
+            avgHor, maxHor = self.maxAndAverageHorizontal()
             sixFeatures.append(avgHor)
             sixFeatures.append(maxVert)
             return sixFeatures
