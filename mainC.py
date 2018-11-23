@@ -9,6 +9,7 @@ from mnist import MNIST
 import random
 import numpy as np
 import pcn as p
+import features as feat
 
 def density(image):
     # input: takes the non modified image with the original #        pixel values in it
@@ -224,6 +225,14 @@ def main():
 
     print("Maximum Horizontal Intersections =", maxHorizontal)
     '''
+
+
+    trainFeatures = []
+    #for i in TrainImages:
+    iFeatures = feat(data7Images[0])
+    features6 = []
+    features6.append(iFeatures.getFeatures())
+    trainFeatures.append(features6)
 		
     inputs = np.array(TrainImages)
     targets = [[label] for label in TrainLabels]
