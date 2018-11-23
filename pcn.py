@@ -59,7 +59,10 @@ class perceptron:
 
 	def confusionMatrix(self, inputs, targets):
 		#add inputs that match the bias node
+		print("hi")
 		biasNode = -np.ones((self.nData,1))
+		print("Bias node length is: ", len(biasNode))
+		print("Input node length is: ", len(inputs))
 		inputs = np.concatenate((inputs, biasNode), axis = 1)
 		outputs = np.dot(inputs, self.weights)
 		
@@ -77,14 +80,14 @@ class perceptron:
 			for j in range( nClasses ):
 				confusionM[i][j] = np.sum(np.where(outputs == i, 1, 0) * np.where(targets == j, 1, 0))
 		
-		print(confusionM)
-		print( np.trace(confusionM) / np.sum(confusionM) )
+		#print(confusionM)
+		#print( np.trace(confusionM) / np.sum(confusionM) )
 
 	
-''' Training AND '''	
+''' Training AND  
 a = np.array([[0,0,0],[0,1,0],[1,0,0],[1,1,1]])
 
 p = perceptron(a[:, 0:2], a[:, 2:])
 print(p.perceptronTrain(a[:, 0:2], a[:, 2:], 0.25, 10))
 print()
-p.confusionMatrix(a[:, 0:2], a[:, 2:]) 
+p.confusionMatrix(a[:, 0:2], a[:, 2:])  '''

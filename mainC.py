@@ -4,15 +4,14 @@ Class: CS 480 Artificial Intelligence
 Professor: Bala Ravikumar
 Project: Project 5 MNIST Data Set Classification
 """
-
-
 from mnist import MNIST
+
 import random
-import test as pcn
+import numpy as np
+import pcn as p
 
 def density(image):
-    # input: takes the non modified image with the original
-    #        pixel values in it
+    # input: takes the non modified image with the original #        pixel values in it
     return sum(image) / len(image)
 
 
@@ -145,6 +144,7 @@ def specificDigits(labels,images, cls1, cls2 = None):
 
 def splitTrainTest(images, labels):
     twentyPercent  = int(len(images) * 0.20)
+
     trainImages = images[:len(images)-twentyPercent]
     testImages = images[len(images)-twentyPercent:]
 
@@ -230,12 +230,15 @@ def main():
     targets = np.array(targets)
 
     print("Training Data")
-    perc = pcn.pcn(inputs, targets)
-    (perc.pcntrain(inputs, targets, 0.1, 1000))
-
+    perc = p.perceptron(inputs, targets)
+    (perc.perceptronTrain(inputs, targets, 0.1, 1000))
+    print("Finished Training Data")
+    print("Confusion Matrix for testing items")
+    perc.confusionMatrix(inputs, targets)
     inputs = np.array(TestImages)
     targets = [[label] for label in TestLabels]
-    perc.confmat(inputs, targets)
+	
+    perc.confusionMatrix(inputs, targets)
 
 
 if __name__ == "__main__":
