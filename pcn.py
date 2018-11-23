@@ -82,12 +82,3 @@ class perceptron:
 		
 		#print(confusionM)
 		#print( np.trace(confusionM) / np.sum(confusionM) )
-
-	
-''' Training AND  
-a = np.array([[0,0,0],[0,1,0],[1,0,0],[1,1,1]])
-
-p = perceptron(a[:, 0:2], a[:, 2:])
-print(p.perceptronTrain(a[:, 0:2], a[:, 2:], 0.25, 10))
-print()
-p.confusionMatrix(a[:, 0:2], a[:, 2:])  '''
