@@ -24,14 +24,16 @@ class perceptron:
 		self.weights = np.random.rand(self.nIn + 1, self.nOut) * 0.1 - 0.05
 		
 	""" Train perceptron """
-	def perceptronTrain(self, inputs, targets, eta, epochs):
+	def perceptronTrain(self, inputs, targets, eta, epochs, testInputs, testTargets):
 		#Add inputs that match the bias node
 		biasNode = -np.ones((self.nData,1))
 		inputs = np.concatenate((inputs, biasNode), axis = 1)
 		
 		#Training 
-		change = range(self.nData)
-		
+		change = list(range(self.nData))
+		successRate = -1
+		oldWeight = self.weights.copy()
+
 		for epoch in range(epochs):
 			self.activations = self.perceptronFire(inputs)
 
@@ -40,12 +42,17 @@ class perceptron:
 			
 			#get difference between results vs wanted results
 			res = self.activations - targets
-			
-			#update weights
-			self.weights -= eta * np.dot(transpose, res)		
-			
-			#we might want randomize our orders again
 
+			#get a new weight
+			self.weights -= eta * np.dot(transpose, res)
+			newSuccessRate = self.confusionMatrix(testInputs, testTargets)
+		
+			#save weights and highest successRate
+			if(successRate < newSuccessRate):
+				successRate = newSuccessRate
+				oldWeight = self.weights.copy()
+			
+		self.weights = oldWeight
 		return self.weights;
 			
 
@@ -59,10 +66,8 @@ class perceptron:
 
 	def confusionMatrix(self, inputs, targets):
 		#add inputs that match the bias node
-		print("hi")
-		biasNode = -np.ones((self.nData,1))
-		print("Bias node length is: ", len(biasNode))
-		print("Input node length is: ", len(inputs))
+		data = np.shape(inputs)[0]
+		biasNode = -np.ones((data,1))
 		inputs = np.concatenate((inputs, biasNode), axis = 1)
 		outputs = np.dot(inputs, self.weights)
 		
@@ -80,5 +85,21 @@ class perceptron:
 			for j in range( nClasses ):
 				confusionM[i][j] = np.sum(np.where(outputs == i, 1, 0) * np.where(targets == j, 1, 0))
 		
-		#print(confusionM)
-		#print( np.trace(confusionM) / np.sum(confusionM) )
+		print(confusionM)
+		print( np.trace(confusionM) / np.sum(confusionM) )
+		return np.trace(confusionM) / np.sum(confusionM)
+	
+	def predictImage(self, inputs):
+		biasNode = []
+		biasNode.append([-1])
+		biasNode = np.array(biasNode)
+		inputs = np.concatenate((inputs, biasNode), axis = 1)
+		val = np.dot(inputs, self.weights)
+		val = np.where(val > 0, 1, 0)
+
+		if val >= 0.5:
+			print("Guess is image is a 9")
+		
+		else:
+			print("Guess is image is a 7")
+		return val
