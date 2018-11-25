@@ -75,7 +75,23 @@ class features:
 
         averageHorizontal = totalHorizontal / 28
         return averageHorizontal, maxHorizontal
+    def fourByFourAvg(self):
+        avg = []
+        shift = 0
 
+        while shift < len(self.greyImage) :
+            val = 0
+            for i in range(4):
+              for j in range(4):
+                row = i*28 
+                col = j + shift
+                val += self.greyImage[row + col]
+            avg.append(val / 16)
+            shift += 4
+            if shift % 28 == 0: #if we reached the end of the image, move to the next 7x7 region
+                shift += 84
+
+        return avg
     def getFeatures(self):
             sixFeatures = []
             sixFeatures.append(self.symmetry_density())
