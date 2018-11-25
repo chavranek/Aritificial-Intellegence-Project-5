@@ -1,7 +1,7 @@
 class features:
     def __init__(self, image):
         self.img = image
-        self.greyImage = image.copy()
+        self.greyImage = self.to_grey()
 
     def density(self):
         return sum(self.img) / len(self.img)
@@ -18,13 +18,14 @@ class features:
         return x / 748
 
     def to_grey(self):
-        for i in range(0, len(self.img)):
+        greyImg = self.img.copy()
+       	for i in range(0, len(self.img)):
             if self.img[i] >= 128:
-                self.greyImage[i] = 0
+                greyImg[i] = 0
             elif self.img[i] < 128:
-                self.greyImage[i] = 1
+                greyImg[i] = 1
 
-    # return self.greyImage
+        return greyImg
 
     def maxAndAverageVertical(self):
         maxVertical = 0
@@ -79,7 +80,7 @@ class features:
             sixFeatures = []
             sixFeatures.append(self.symmetry_density())
             sixFeatures.append(self.density())
-            self.to_grey()
+            #self.to_grey()
             avgVert, maxVert = self.maxAndAverageVertical()
             sixFeatures.append(avgVert)
             sixFeatures.append(maxVert)
